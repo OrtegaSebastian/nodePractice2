@@ -1,0 +1,5 @@
+export default {
+    MAX_LEVEL : 100,
+    BASE_EXPERIENCE : 10,
+    EXPERIENCE_MULTIPLIER : 10
+}
