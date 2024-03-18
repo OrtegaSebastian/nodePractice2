@@ -59,6 +59,18 @@ class Experience {
             constants.EXPERIENCE_MULTIPLIER * (nextLevel - 1);
         return Math.max(0, requiredExperience - this.experience);
     }
+
+    getRequiredExperienceForNextLevel() {
+        const nextLevel = this.level + 1;
+        if (nextLevel > constants.MAX_LEVEL) {
+            return 0;
+        }
+        const requiredExperience =
+            constants.BASE_EXPERIENCE +
+            constants.EXPERIENCE_MULTIPLIER * (nextLevel - 1);
+        return requiredExperience - this.experience;
+    }
+
 }
 
 export default Experience;

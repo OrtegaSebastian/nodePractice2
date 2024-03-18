@@ -1,5 +1,5 @@
-import Experience from '../experience/Experience.js'
-import constants from '../constants/Constants.js';
+import Experience from "../experience/Experience.js";
+import constants from "../constants/Constants.js";
 
 class Character extends Experience {
     constructor(name, level, category, experience = 0) {
@@ -18,7 +18,11 @@ class Character extends Experience {
     setLevel(newLevel) {
         try {
             const parsedLevel = parseInt(newLevel, 10);
-            if (isNaN(parsedLevel) || parsedLevel < 1 || parsedLevel > constants.MAX_LEVEL) {
+            if (
+                isNaN(parsedLevel) ||
+                parsedLevel < 1 ||
+                parsedLevel > constants.MAX_LEVEL
+            ) {
                 throw new Error(`Invalid level: ${newLevel}`);
             }
             this._validateLevel(parsedLevel);
@@ -28,23 +32,41 @@ class Character extends Experience {
         }
     }
     increaseExperience(exp) {
-        super.increaseExperience(exp)
+        super.increaseExperience(exp);
     }
-    // get experienceProgress() {
-    //     const nextLevelExperience = super._calculateLevel(this.level + 1)
-    //     return Math.min(1, this.experience / nextLevelExperience)
-    // }
-
-    getExperienceProgress() {
-        const nextLevelExperience = this.getNextLevelExperience();
-        // Check if nextLevelExperience exists and is a number
-        if (typeof nextLevelExperience !== 'number') {
-          console.error('Error calculating experience progress: Invalid next level experience');
-          return 0; // Or handle the error differently
+    get experienceProgress() {
+        const nextLevel = this.level + 1;
+        if (nextLevel > constants.MAX_LEVEL) {
+            return 0;
         }
-        return Math.min(1, this.experience / nextLevelExperience);
-      }
+        const baseExperience = constants.BASE_EXPERIENCE;
+        const experienceMultiplier = constants.EXPERIENCE_MULTIPLIER;
+        const requiredExperience =
+            baseExperience + experienceMultiplier * (nextLevel - 1);
+        return Math.min(1, this.experience / requiredExperience);
+    }
+    experienceToNextLevel() {
+        const nextLevel = this.level + 1;
+        if (nextLevel > constants.MAX_LEVEL) {
+            return 0;
+        }
+
+        // Prevent infinite loop by checking for 0 experience
+        if (this.experience === 0) {
+            return 0;
+        }
+
+        const baseExperience = constants.BASE_EXPERIENCE;
+        const experienceMultiplier = constants.EXPERIENCE_MULTIPLIER;
+
+        // Calculate required experience up to the next level
+        let requiredExperience = baseExperience;
+        for (let i = 1; i < nextLevel; i++) {
+            requiredExperience += experienceMultiplier * i;
+        }
+
+        return Math.min(1, this.experience / requiredExperience);
+    }
 }
 
 export default Character;
-
