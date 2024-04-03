@@ -1,5 +1,6 @@
 import Experience from "../experience/Experience.js";
 import constants from "../constants/Constants.js";
+import  Category  from "../category/Category.js";
 
 class Character extends Experience {
     constructor(name, level, category, experience = 0) {
